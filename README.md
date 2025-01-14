@@ -1,11 +1,11 @@
 # virtunexa-task2
-# Daily Organizer
+##### Daily Organizer
 The Daily Organizer is a web-based application designed to help users manage their daily tasks efficiently. Users can add tasks, mark them as completed, remove tasks, and set reminders for specific tasks.
-Overview
+### Overview
 
 The Daily Organizer is a web-based application designed to help users manage their daily tasks efficiently. With features like task addition, completion, removal, and reminders, the application ensures users stay organized and productive.
 
-Features
+### Features
 
 Task Management: Add, complete, and remove tasks seamlessly.
 
@@ -15,7 +15,7 @@ Interactive UI: User-friendly design with animations and visual cues for better 
 
 Dynamic Updates: No page reloads needed; all interactions are real-time.
 
-Usage
+### Usage
 
 Adding a Task
 
