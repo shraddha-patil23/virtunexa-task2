@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Organizer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #B666D2, #d8a7ea);
+            color: #fff;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: #2c2c2c;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            text-align: center;
+            color: #fff;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #a5a5a5;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .form-group input {
+            padding: 10px;
+            border: 2px solid #444;
+            border-radius: 30px;
+            outline: none;
+            transition: all 0.3s;
+            background-color: #444;
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+        .form-group input:focus {
+            border-color: #85929e;
+            background-color: #555;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(to bottom, #85929e, #6b7a84);
+            color: #fff;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .form-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background-color: #3a3a3a;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        li.completed {
+            text-decoration: line-through;
+            color: #8bffa1;
+            background-color: #2a2a2a;
+        }
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+        li input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        li button {
+            background: linear-gradient(to bottom, #85929e, #6b7a84);
+            border: none;
+            color: #fff;
+            border-radius: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        li button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+        li .remove-btn {
+            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+        }
+        li .remove-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(to bottom, #c0392b, #a93226);
+        }
+        li .reminder-btn {
+            background: linear-gradient(to bottom, #85929e, #6b7a84);
+        }
+        li .reminder-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(to bottom, #6b7a84, #54616d);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Organizer</h1>
+        <div class="form-group">
+            <input type="text" id="taskInput" placeholder="Enter a task">
+            <button onclick="addTask()">Add</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        const tasks = [];
+
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskValue = taskInput.value.trim();
+
+            if (taskValue === '') {
+                alert('Please enter a valid task.');
+                return;
+            }
+
+            const taskList = document.getElementById('taskList');
+            const listItem = document.createElement('li');
+            const taskId = Date.now();
+
+            listItem.setAttribute('data-id', taskId);
+            listItem.innerHTML = `
+                <div>
+                    <input type="checkbox" onchange="markComplete(this)">
+                    <span>${taskValue}</span>
+                </div>
+                <div>
+                    <button class="remove-btn" onclick="removeTask(this)">Remove</button>
+                    <button class="reminder-btn" onclick="setReminder(${taskId})">Reminder</button>
+                </div>
+            `;
+
+            taskList.appendChild(listItem);
+            tasks.push({ id: taskId, name: taskValue, reminder: null });
+            taskInput.value = '';
+        }
+
+        function markComplete(checkbox) {
+            const listItem = checkbox.closest('li');
+            listItem.classList.toggle('completed', checkbox.checked);
+        }
+
+        function removeTask(button) {
+            const listItem = button.closest('li');
+            const taskId = parseInt(listItem.getAttribute('data-id'));
+            const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+            if (taskIndex > -1) {
+                tasks.splice(taskIndex, 1);
+            }
+
+            listItem.remove();
+        }
+
+        function setReminder(taskId) {
+            const reminderDate = prompt('Enter reminder date (YYYY-MM-DD):');
+            const reminderTime = prompt('Enter reminder time (HH:MM, 24-hour format):');
+
+            // Ensure inputs are provided
+            if (!reminderDate || !reminderTime) {
+                alert('Invalid date or time. Please try again.');
+                return;
+            }
+
+            // Parse the input into a valid Date object
+            const dateTime = new Date(`${reminderDate}T${reminderTime}:00`);
+
+            // Validate the parsed date
+            if (isNaN(dateTime.getTime())) {
+                alert('Invalid date and time format. Please try again.');
+                return;
+            }
+
+            const now = new Date();
+            const reminderTimeMs = dateTime - now;
+
+            // Debug log: Current time, reminder time, and time difference in milliseconds
+            console.log('Current Time:', now);  
+            console.log('Reminder Time:', dateTime);  
+            console.log('Time difference (ms):', reminderTimeMs);
+
+            // Validate that the reminder is in the future
+            if (reminderTimeMs <= 0) {
+                alert('The reminder time must be in the future.');
+                return;
+            }
+
+            const task = tasks.find(task => task.id === taskId);
+
+            if (task) {
+                // Clear any previous reminder for the task
+                if (task.reminder) {
+                    clearTimeout(task.reminder);
+                }
+
+                // Set the new reminder
+                task.reminder = setTimeout(() => {
+                    alert(`Reminder: ${task.name}`);
+                }, reminderTimeMs);
+
+                alert(`Reminder set for "${task.name}" at ${dateTime.toLocaleString()}.`);
+            }
+        }
+    </script>
+</body>
+</html>
