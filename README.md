@@ -5,7 +5,7 @@
 The Daily Organizer is a web-based application designed to help users manage their daily tasks efficiently. With features like task addition, completion, removal, and reminders, the application ensures users stay organized and productive.
 
 ### Features
-
+___
 Task Management: Add, complete, and remove tasks seamlessly.
 
 Reminders: Set reminders for specific tasks with date and time.
@@ -15,7 +15,7 @@ Interactive UI: User-friendly design with animations and visual cues for better 
 Dynamic Updates: No page reloads needed; all interactions are real-time.
 
 ### Usage
-
+___
 Adding a Task
 
 Enter the task in the input box labeled "Enter a task."
